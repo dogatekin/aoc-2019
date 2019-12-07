@@ -4,12 +4,12 @@ def get(xs, i, mode):
     elif mode == '1':
         return xs[i]
 
-def compute(xs, inputs):
-    i = 0
+def compute(xs, inputs, i=0):
     ins = xs[i]
     op = str(ins)[-2:]
     modes = str(ins)[-3::-1]
     modes = modes + '0'*(2-len(modes))
+    out = None
     
     while op != '99':
         if op.endswith('1'):
@@ -19,10 +19,12 @@ def compute(xs, inputs):
             xs[xs[i+3]] = get(xs, i+1, modes[0]) * get(xs, i+2, modes[1])
             i += 4
         elif op.endswith('3'):
-            xs[xs[i+1]] = inputs.pop()
+            if out is not None:
+                return out, xs, i
+            xs[xs[i+1]] = inputs.popleft()
             i += 2
         elif op.endswith('4'):
-            return get(xs, i+1, modes[0])
+            out = get(xs, i+1, modes[0])
             i += 2
         elif op.endswith('5'):
             if get(xs, i+1, modes[0]):
@@ -54,6 +56,4 @@ def compute(xs, inputs):
         modes = str(ins)[-3::-1]
         modes = modes + '0'*(2-len(modes))
     
-    return xs
-
-# assert compute([1002,4,3,4,33]) == [1002,4,3,4,99]
+    return out, xs, i
