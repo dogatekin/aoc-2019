@@ -3,11 +3,11 @@ from collections import deque
 from computer import compute
 
 with open('input.txt', 'r') as f:
-    xs = [int(x) for x in f.read().split(',')]
+    XS = [int(x) for x in f.read().split(',')]
     
 maximum = float('-inf')
 for perm in permutations(range(5, 10)):
-    states = [(xs[:], deque([phase]), 0) for phase in perm]
+    states = [(XS[:], deque([phase]), 0) for phase in perm]
     states[0][1].append(0)
 
     while states[-1][0][states[-1][2]] != 99:
